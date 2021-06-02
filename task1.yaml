@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: scripts-bash-
+spec:
+  entrypoint: git-clone
+  templates:
+  - name: git-clone
+    inputs:
+      artifacts:
+      - name: argo-source
+        path: /src
+        git:
+          repo: https://github.com/SiyaAmonkar/Argo.git
+    script:
+      image: python:alpine3.6
+      command: [python]
+      source: |
+        import os
+        i = os.listdir()
+        print(i)
+        os.chdir("/src")
+        a = os.listdir("/src")
+        print(a)
+        exec(open("helloworld.py").read())
