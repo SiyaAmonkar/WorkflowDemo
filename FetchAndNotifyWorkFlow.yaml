@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: workflow-calling-workflowtemplates
+spec:
+  entrypoint: fetch
+  onExit: post-msg-slack
+  templates:
+  - name: fetch
+    steps:                              
+      - - name: call-git-clone
+          templateRef:                 
+            name: git-clone-template  # This is the name of the "WorkflowTemplate" 
+            template: git-clone       # This is the name of the "template" used from workflow template
+          arguments:                  
+            parameters: 
+            - name: repo
+              value: "https://github.com/SiyaAmonkar/ArgoCaller.git" # git uri passed to clone the git repo
+  - name: post-msg-slack
+    steps:
+      - - name: notify-slack
+          templateRef:
+            name: post-slack-template
+            template: post-message-slack
+          arguments:
+            parameters:
+              - name: workflowname # name of the workflow passed to post on slack channel
+                value: "{{workflow.name}}"
+              - name: status       # status of the workflow passed to post on slack channel
+                value: "{{workflow.status}}"  
