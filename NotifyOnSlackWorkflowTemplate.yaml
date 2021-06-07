@@ -15,4 +15,4 @@ spec:
         source: |
           apt-get update
           apt-get -y install curl 
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"{{inputs.parameters.workflowname}}:{{inputs.parameters.status}}"}' https://hooks.slack.com/services/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
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"{{inputs.parameters.workflowname}}:{{inputs.parameters.status}}"}' https://hooks.slack.com/services/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
