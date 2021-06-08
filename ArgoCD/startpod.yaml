@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: run-templateworkflow
+spec:
+  containers:
+  - name: argo
+    image: ubuntu:latest
+    command:
+        - /bin/sh
+        - -c
+        - |
+          apt-get update
+          apt-get install git -y
+          apt-get install curl -yy
+          mkdir home
+          cd home
+          git clone https://github.com/SiyaAmonkar/WorkflowDemo.git 
+          ls -l
+          curl -sLO https://github.com/argoproj/argo/releases/download/v3.0.2/argo-linux-amd64.gz
+          gunzip argo-linux-amd64.gz
+          chmod +x argo-linux-amd64
+          mv ./argo-linux-amd64 /usr/local/bin/argo
+          argo list
+          cd WorkflowDemo
+          argo template create GitRepoCodeFetchWorkflowTemplate.yaml
+          argo template create NotifyOnSlackWorkflowTemplate.yaml
+          argo submit --watch FetchAndNotifyWorkFlow.yaml
+  restartPolicy: Never
