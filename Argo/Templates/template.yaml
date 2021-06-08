@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: retry-strategy-template
+spec:
+  templates:
+    - name: retry-template
+      retryStrategy:
+        limit: "3"
+        retryPolicy: "Always"
+      script:
+        image:  conda/c3i-linux-64
+        command: ["bash"]
+        # fail with a 66% probability
+        source: |
+          conda version
