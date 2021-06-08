@@ -1,1 +1,30 @@
-dswdd
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: workflow-calling-retryscript-notify
+spec:
+  entrypoint: dag-retry
+  onExit: post-msg-slack
+  templates:
+  - name: dag-retry
+    dag:
+      tasks:
+        - name: build-package
+          templateRef:
+            name: retry-strategy-template  # This is the name of the "WorkflowTemplate" 
+            template: retry-template       # This is the name of the "template" used from workflow template
+
+  - name: post-msg-slack
+    steps:
+      - - name: notify-slack
+          templateRef:
+            name: notifications
+            template: notify-slack
+          arguments:
+            parameters:
+              - name: workflow-name # name of the workflow passed to post on slack channel
+                value: "{{workflow.name}}"
+              - name: workflow-status       # status of the workflow passed to post on slack channel
+                value: "{{workflow.status}}"
+              - name: workflow-failures
+                value: "{{workflow.failures}}"
