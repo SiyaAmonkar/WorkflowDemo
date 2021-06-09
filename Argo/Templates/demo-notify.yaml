@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: notifications
+spec:
+  templates:  
+  #
+  # Send Slack Notifications based on main workflow status.
+  #
+  - name: notify-slack
+    inputs:
+      parameters:
+      - name: workflow-name
+      - name: workflow-status
+      - name: workflow-failures
+    script:
+      image: 
+      securityContext:
+        privileged: true
+      command: [bash]
+      env:
+      - name: SLACK_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: slack-secret
+            key: token
+      source: |
+        echo "Sending Notifications"
+        status=$(curl -X POST \
+        -H 'Content-type: application/json' \
+        --data '{"text":"Build Status for {{inputs.parameters.workflow-name}} on '$ARCH' is {{inputs.parameters.workflow-status}}"}' \
+        https://hooks.slack.com/services/T01DP65KQKD/B01PX4B44LW/$SLACK_TOKEN)
+
+        echo "Slack Post status" $status
+
