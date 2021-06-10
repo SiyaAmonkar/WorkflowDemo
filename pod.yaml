@@ -25,7 +25,7 @@ spec:
           # Delete existing templates
           argo template delete retry-strategy-template -n argo
           argo template delete notifications -n argo
-         
+          # ###
           argo template create Argo/Templates/template.yaml -n argo
           argo template create Argo/Templates/demo-notify.yaml -n argo
           argo submit --watch Argo/Workflow/start.yaml -n argo
