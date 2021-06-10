@@ -5,9 +5,6 @@ metadata:
 spec:
   templates:
     - name: retry-template
-      retryStrategy:
-        limit: "3"
-        retryPolicy: "Always"
       script:
         image:  conda/c3i-linux-64
         command: ["bash"]
