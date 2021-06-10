@@ -14,7 +14,7 @@ spec:
       - name: workflow-status
       - name: workflow-failures
     script:
-      image: 
+      image: ubuntu:18.04
       securityContext:
         privileged: true
       command: [bash]
