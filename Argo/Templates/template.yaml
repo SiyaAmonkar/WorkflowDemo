@@ -10,4 +10,11 @@ spec:
         command: ["bash"]
         # fail with a 66% probability
         source: |
+          set -e
           conda info
+          conda install git
+          git clone https://github.com/SiyaAmonkar/numactl-feedstock.git
+          cd numactl-feedstock/recipe
+          ls
+          conda install conda-build
+          conda-build meta.yaml
