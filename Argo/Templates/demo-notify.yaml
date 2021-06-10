@@ -31,7 +31,7 @@ spec:
         echo "Sending Notifications"
         status=$(curl -X POST \
         -H 'Content-type: application/json' \
-        --data '{"text":"Build Status for {{inputs.parameters.workflow-name}} on '$ARCH' is {{inputs.parameters.workflow-status}}"}' \
+        --data '{"text":"Buildd Status for {{inputs.parameters.workflow-name}} on '$ARCH' is {{inputs.parameters.workflow-status}}"}' \
         https://hooks.slack.com/services/T01DP65KQKD/B01PX4B44LW/$SLACK_TOKEN)
 
         echo "Slack Post status" $status
