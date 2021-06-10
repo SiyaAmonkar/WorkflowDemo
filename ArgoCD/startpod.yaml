@@ -22,11 +22,14 @@ spec:
           chmod +x argo-linux-amd64
           mv ./argo-linux-amd64 /usr/local/bin/argo
           argo list
+          cd WorkflowDemo
+          # Apply Slack Token
+          kubectl apply -f install/slack-secret.yaml -n argo
           # Delete existing templates
           argo template delete retry-strategy-template
           argo template delete notifications
-          cd WorkflowDemo
+         
           argo template create Argo/Templates/template.yaml
           argo template create Argo/Templates/demo-notify.yaml
-          argo submit --watch Argo/Workflow/start.yaml
+          argo submit --watch Argo/Workflow/start.yaml -n argo
   restartPolicy: OnFailure
