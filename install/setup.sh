@@ -29,4 +29,8 @@ chmod +x /usr/local/bin/argocd
 # To access the api server 
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
+# Slack secret creation
+kubectl apply -f install/slack-secret.yaml -n argo
+kubectl apply -f install/slack-secret.yaml -n argocd
+
 
