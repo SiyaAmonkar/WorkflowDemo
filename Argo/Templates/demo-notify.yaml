@@ -25,6 +25,9 @@ spec:
             name: slack-secret
             key: token
       source: |
+        apt-get update
+        apt-get -y install curl 
+        
         echo "Sending Notifications"
         status=$(curl -X POST \
         -H 'Content-type: application/json' \
