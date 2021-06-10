@@ -13,23 +13,22 @@ spec:
           apt-get update
           apt-get install git -y
           apt-get install curl -yy
-          mkdir home
-          cd home
+          cd /home
           git clone https://github.com/SiyaAmonkar/WorkflowDemo.git 
           ls -l
           curl -sLO https://github.com/argoproj/argo/releases/download/v3.0.2/argo-linux-amd64.gz
           gunzip argo-linux-amd64.gz
           chmod +x argo-linux-amd64
           mv ./argo-linux-amd64 /usr/local/bin/argo
-          argo list
+          argo list -n argo
           cd WorkflowDemo
           # Apply Slack Token
           kubectl apply -f install/slack-secret.yaml -n argo
           # Delete existing templates
-          argo template delete retry-strategy-template
-          argo template delete notifications
+          argo template delete retry-strategy-template -n argo
+          argo template delete notifications -n argo
          
-          argo template create Argo/Templates/template.yaml
-          argo template create Argo/Templates/demo-notify.yaml
+          argo template create Argo/Templates/template.yaml -n argo
+          argo template create Argo/Templates/demo-notify.yaml -n argo
           argo submit --watch Argo/Workflow/start.yaml -n argo
   restartPolicy: OnFailure
