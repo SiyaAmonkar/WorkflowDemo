@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: run-templateworkflow
+spec:
+  containers:
+  - name: argo
+    image: ubuntu:latest
+    command:
+        - /bin/sh
+        - -c
+        - |
+          apt-get update
+          apt-get install git -y
+          apt-get install curl -yy
+          mkdir home
+          cd home
+          git clone https://github.com/SiyaAmonkar/WorkflowDemo.git 
+          ls -l
+          curl -sLO https://github.com/argoproj/argo/releases/download/v3.0.2/argo-linux-amd64.gz
+          gunzip argo-linux-amd64.gz
+          chmod +x argo-linux-amd64
+          mv ./argo-linux-amd64 /usr/local/bin/argo
+          argo list
+          cd WorkflowDemo
+          # Apply Slack Token
+          kubectl apply -f install/slack-secret.yaml -n argo
+          # Delete existing templates
+          argo template delete retry-strategy-template
+          argo template delete notifications
+         
+          argo template create Argo/Templates/template.yaml
+          argo template create Argo/Templates/demo-notify.yaml
+          argo submit --watch Argo/Workflow/start.yaml -n argo
+  restartPolicy: OnFailure
