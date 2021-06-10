@@ -10,4 +10,4 @@ spec:
         command: ["bash"]
         # fail with a 66% probability
         source: |
-          conda version
+          conda info
