@@ -12,4 +12,4 @@ spec:
       image: ubuntu:18.04
       command: [bash]
       source: |
-        argo list
+        argo list -n argo
