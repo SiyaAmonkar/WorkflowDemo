@@ -8,7 +8,8 @@ spec:
   entrypoint: whalesay
   templates:
   - name: whalesay
-    container:
-      image: docker/whalesay:latest
-      command: [cowsay]
-      args: ["hello world...."]
+    script:
+      image: ubuntu:18.04
+      command: [bash]
+      source: |
+        argo list
