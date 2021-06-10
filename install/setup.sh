@@ -30,7 +30,7 @@ chmod +x /usr/local/bin/argocd
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 # Slack secret creation
-kubectl apply -f install/slack-secret.yaml -n argo
-kubectl apply -f install/slack-secret.yaml -n argocd
+kubectl apply -f slack-secret.yaml -n argo
+kubectl apply -f slack-secret.yaml -n argocd
 
 
