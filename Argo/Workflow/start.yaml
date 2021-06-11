@@ -2,6 +2,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   name: workflow-calling-retryscript-notify
+  annotations:
+    argocd.argoproj.io/hook: PostSync
 spec:
   entrypoint: dag-retry
   onExit: post-msg-slack
