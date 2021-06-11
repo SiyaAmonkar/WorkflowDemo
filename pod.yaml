@@ -1,33 +1,31 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Workflow
+apiVersion: v1
+kind: Pod
 metadata:
-  generateName: hello-world-
+  name: run-templateworkflow
   annotations:
-    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook: PreSync
 spec:
-  entrypoint: whalesay
-  templates:
-  - name: whalesay
-    script:
-      image: ubuntu:18.04
-      command: [bash]
-      source: |
-        apt-get update
-        apt-get install git -y
-        apt-get install curl -yy
-        cd /home
-        git clone https://github.com/SiyaAmonkar/WorkflowDemo.git 
-        ls -l
-        curl -sLO https://github.com/argoproj/argo/releases/download/v3.0.2/argo-linux-amd64.gz
-        gunzip argo-linux-amd64.gz
-        chmod +x argo-linux-amd64
-        mv ./argo-linux-amd64 /usr/local/bin/argo
-        argo list -n argo
-        cd WorkflowDemo
-        # Delete existing templates
-        argo template delete retry-strategy-template -n argo
-        argo template delete notifications -n argo
-        argo template create Argo/Templates/template.yaml -n argo
-        argo template create Argo/Templates/demo-notify.yaml -n argo
-        argo submit --watch Argo/Workflow/start.yaml -n argo
-        
+  containers:
+  - name: argo
+    image: ubuntu:latest
+    command:
+        - /bin/sh
+        - -c
+        - |
+          apt-get update
+          apt-get install git -y
+          apt-get install curl -yy
+          cd /home
+          git clone https://github.com/SiyaAmonkar/WorkflowDemo.git 
+          ls -l
+          curl -sLO https://github.com/argoproj/argo/releases/download/v3.0.2/argo-linux-amd64.gz
+          gunzip argo-linux-amd64.gz
+          chmod +x argo-linux-amd64
+          mv ./argo-linux-amd64 /usr/local/bin/argo
+          argo list -n argo
+          cd WorkflowDemo
+          # Delete existing templates
+          argo template delete retry-strategy-template -n argo
+          argo template delete notifications -n argo
+          argo delete workflow-calling-retryscript-notify -n argo
+  restartPolicy: Always
